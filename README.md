@@ -24,7 +24,7 @@ You can see project demo here: http://http://118.89.58.160/
 
 5. The flow chart for a user to book a car is as below.
 
-   ![image-flowchart](flow-chart.png)
+   ![image-flowchart](assets/flow-chart.png)
 
 ### UI Design
 

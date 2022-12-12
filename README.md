@@ -24,18 +24,7 @@ You can see project demo here: http://http://118.89.58.160/
 
 5. The flow chart for a user to book a car is as below.
 
-   ```flow
-   st=>start: start
-   op=>operation: choose time period
-   cond=>condition: has avaliable car?
-   sub1=>subroutine: no car avaliable
-   op2=>operation: choose avaliable car model
-   op3=>operation: generate order
-   e=>end: end
-   st->op->cond
-   cond(yes)->op2->op3->e
-   cond(no)->sub1(right)->op
-   ```
+   ![image-flowchart](flow-chart.png)
 
 ### UI Design
 
@@ -45,9 +34,9 @@ This page is implemented by **[amis]([介绍 (baidu.com)](https://aisuda.bce.bai
 
 UI source code url: 
 
-![image-20221212002052852](ui-guide-1.png)
+![image-20221212002052852](assets/ui-guide-1.png)
 
-![image-20221212002428774](ui-guide-2.png)
+![image-20221212002428774](assets/ui-guide-2.png)
 
 ### API Design
 
@@ -61,49 +50,23 @@ UI source code url:
 
 1. **getAvailableCars**
 
-```sequence
-User -> CarRentalService: send request
-CarRentalService -> CarRentalService: params check (start_time and end_time not null)
-CarRentalService -> MySQL: query cars & orders info
-MySQL -> CarRentalService: return response
-CarRentalService -> CarRentalService: calculate available cars
-CarRentalService -> User: return response
-
-
-```
-
-
+![image-getavaliablecar](assets/get-avaliable-car-seq.png)
 
 2. **placeOrder**
 
-   ```sequence
-   User -> CarRentalService: send request
-   CarRentalService -> CarRentalService: params check
-   CarRentalService -> MySQL: query cars by model
-   MySQL -> CarRentalService: return response
-   CarRentalService -> MySQL: query in-use cars between start time and end time
-   CarRentalService -> CarRentalService: choose a free car
-   CarRentalService -> MySQL: place order (insert)
-   MySQL -> CarRentalService: return response
-   CarRentalService -> User: return response
-   ```
-
+   ![image-place-order](assets/place-order.png)
    
-
+   
+   
 3. **queryOrders**
 
-   ```sequence
-   User -> CarRentalService: send request
-   CarRentalService -> MySQL: query order list (order by id decs)
-   MySQL -> CarRentalService: return response
-   CarRentalService -> User: return response
-   ```
-
+   ![image-query-order](assets/query-order.png)
+   
    ### DB Design
-
+   
    As mentioned above, since the system doen't integrate **User Management Module** currently. We try to make the event keep simple. Thus, in this version's design, we only have **cars** and **orders** table. We can use car table to query cars information, and distribute cars to different orders. I **only add required fields in table**, extra info like create_time, creator, edit_time etc. won't show in this project temporarily. Thus, the ER-diagram like below:
-
-   ![image-20221212144821112](ER-diagram.png)
+   
+![image-20221212144821112](assets/ER-diagram.png)
 
 ```sql
 CREATE TABLE `cars` (
@@ -131,5 +94,5 @@ CREATE TABLE `orders` (
 
 I user Tencent Cloud to publish this project (**Poor, no Master/VISA Card T T**), the deploy framework is as below.
 
-![image-20221212215821787](deploy-framework.png)
+![image-20221212215821787](assets/deploy-framework.png)
 

@@ -1,5 +1,7 @@
 package org.sunhaolab.carrental.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +20,15 @@ import java.util.Map;
 @RestController
 public class OrderController {
 
+    Logger logger = LoggerFactory.getLogger(OrderController.class);
+
     @Resource
     OrderService orderService;
 
     @GetMapping(path = "/orders")
     @ResponseBody
     public ResponseEntity queryOrders() {
+        logger.info("Start querying orders...");
         ResponseEntity resp = new ResponseEntity();
         resp.setStatus(0);
         resp.setMsg("ok");
@@ -32,6 +37,7 @@ public class OrderController {
         data.put("rows",orderList);
         data.put("count",orderList.size());
         resp.setData(data);
+        logger.info("Query orders finished.");
         return resp;
     }
 
@@ -40,6 +46,7 @@ public class OrderController {
     public ResponseEntity placeOrder(
             @RequestBody Order order
     ) {
+        logger.info("Start place order...");
         Integer res = orderService.placeOrder(order);
         ResponseEntity resp = new ResponseEntity();
         if(res > 0) {
@@ -51,7 +58,7 @@ public class OrderController {
             resp.setMsg("generate order failed, total:" + 0);
             resp.setData("failed");
         }
-
+        logger.info("Place order finished.");
         return resp;
     }
 

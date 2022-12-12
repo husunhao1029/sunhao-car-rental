@@ -1,5 +1,7 @@
 package org.sunhaolab.carrental.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.sunhaolab.carrental.exception.ServiceException;
@@ -16,6 +18,8 @@ import java.util.Map;
 @RestController
 public class CarsController {
 
+    Logger logger = LoggerFactory.getLogger(CarsController.class);
+
     @Resource
     CarsService carsService;
 
@@ -25,7 +29,7 @@ public class CarsController {
             @RequestParam(value = "startTime") String startTime,
             @RequestParam(value = "endTime") String endTime
     ) {
-        System.out.println("startTime is: '" + startTime + "'");
+        logger.info("Start querying available cars, start time is {}, end time is {}", startTime, endTime);
         ResponseEntity resp = new ResponseEntity();
         resp.setStatus(0);
         resp.setMsg("ok");
@@ -33,6 +37,7 @@ public class CarsController {
         List<StockInfo> res = carsService.getAvailableCars(startTime, endTime);
         map.put("options", res);
         resp.setData(map);
+        logger.info("Query available cars finished.");
         return resp;
     }
 

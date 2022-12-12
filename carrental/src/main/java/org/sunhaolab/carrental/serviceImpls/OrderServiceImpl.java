@@ -1,5 +1,7 @@
 package org.sunhaolab.carrental.serviceImpls;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.sunhaolab.carrental.dao.CarsMapper;
 import org.sunhaolab.carrental.dao.OrderMapper;
@@ -16,6 +18,8 @@ import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Resource
     OrderMapper orderMapper;
@@ -35,10 +39,12 @@ public class OrderServiceImpl implements OrderService {
         //param check
         if (null == order.getStartTime() || order.getStartTime().equals("")
                 || null == order.getEndTime() || order.getEndTime().equals("")) {
+            logger.error("Invalid input time, startTime is: {}, and endTime is :{}", order.getStartTime(), order.getEndTime());
             return 0;
         }
         CustomValidationUtil.timeValidation(order.getStartTime(), order.getEndTime());
         if(null == order.getCarModel() || order.getCarModel().equals("")) {
+            logger.error("Invalid car model, value is: {}", order.getCarModel());
             throw new ServiceException("Car model cannot be empty!");
         }
 

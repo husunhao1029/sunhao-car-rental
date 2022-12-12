@@ -1,8 +1,11 @@
 package org.sunhaolab.carrental.serviceImpls;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.sunhaolab.carrental.dao.CarsMapper;
 import org.sunhaolab.carrental.dao.OrderMapper;
+import org.sunhaolab.carrental.exception.ServiceException;
 import org.sunhaolab.carrental.model.Model;
 import org.sunhaolab.carrental.model.StockInfo;
 import org.sunhaolab.carrental.services.CarsService;
@@ -12,12 +15,14 @@ import org.sunhaolab.carrental.utils.DateUtil;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class CarsServiceImpl implements CarsService {
 
+    Logger logger = LoggerFactory.getLogger(CarsServiceImpl.class);
     @Resource
     private CarsMapper carsMapper;
 
@@ -28,6 +33,7 @@ public class CarsServiceImpl implements CarsService {
     public List<StockInfo> getAvailableCars(String startTime, String endTime) {
         List<StockInfo> res = new ArrayList();
         if (null == startTime || startTime.equals("") || null == endTime || endTime.equals("")) {
+            logger.error("Invalid input time, startTime is: {}, and endTime is :{}", startTime, endTime);
             return res;
         }
 
@@ -38,7 +44,13 @@ public class CarsServiceImpl implements CarsService {
 
         List<Model> modelList = carsMapper.selectModelCount();
         List<Map<String, Integer>> occupiedModelList = orderMapper.countOccupiedNum(startTime, endTime);
-        Map<String, Integer> occupiedModelMap = DataUtil.mapListToMap(occupiedModelList, "model", "counter");
+        Map<String, Integer> occupiedModelMap;
+        try {
+            occupiedModelMap = DataUtil.mapListToMap(occupiedModelList, "model", "counter");
+        } catch (Exception e) {
+            logger.error("Convert occupiedModelList to map failed, list value is: {}", occupiedModelList.toString());
+            throw new ServiceException("Convert occupiedModelList to map failed.");
+        }
         modelList.forEach(
                 model -> {
                     StockInfo stockInfo = new StockInfo();

@@ -13,7 +13,7 @@ public class CustomValidationUtil {
             st = new Long(startTime);
             et = new Long(endTime);
         } catch (Exception e) {
-            new ServiceException("Invalid input, please check startTime and endTime are both timestamp format.");
+            throw new ServiceException("Invalid input, please check startTime and endTime are both timestamp format.");
         }
 
 

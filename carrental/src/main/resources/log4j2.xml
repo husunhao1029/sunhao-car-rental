@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="fatal">
     <Properties>
-        <Property name="baseDir" value="D:\logs"/>
+        <Property name="baseDir" value="/app/backend/logs"/>
     </Properties>
 
     <Appenders>

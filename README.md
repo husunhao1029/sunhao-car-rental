@@ -1,7 +1,7 @@
 # sunhao-car-rental
 A simple car rental system's backend, developed by SpringBoot framework.
 
-You can see project demo here: http://http://118.89.58.160/
+You can see project demo here: http://carrental.husunhao.tech
 
 ## System Design
 

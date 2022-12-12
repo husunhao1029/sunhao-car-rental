@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.sunhaolab.carrental.dao.OrderMapper">
+    <select id="countOccupiedNum" resultType="java.util.Map">
+        select model, count(id) counter
+        from orders
+        where #{endTime} >= start_time
+        and end_time >= #{startTime}
+        group by model;
+    </select>
+
+    <select id="selectOrderList" resultType="java.util.Map">
+        select id order_id, model, start_time, end_time
+        from orders
+        order by order_id desc;
+    </select>
+
+    <select id="selectOccupiedCars" resultType="String">
+        select car_id id
+        from orders
+        where #{endTime} >= start_time
+          and end_time >= #{startTime}
+          and model = #{model}
+    </select>
+
+    <insert id="generateOrder">
+        insert into orders (`car_id`,`model`,`start_time`, `end_time`)
+        values (#{carId}, #{model}, #{startTime}, #{endTime})
+    </insert>
+
+</mapper>

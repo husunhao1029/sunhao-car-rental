@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.sunhaolab.carrental.dao.CarsMapper">
+    <select id="selectModelCount" resultType="org.sunhaolab.carrental.model.Model">
+        select model, count(model) counter
+        from cars
+        group by model;
+    </select>
+
+    <select id="selectCarsByModel" resultType="org.sunhaolab.carrental.model.Car">
+        select id, model
+        from cars
+        where model = #{model}
+    </select>
+</mapper>

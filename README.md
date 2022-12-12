@@ -32,7 +32,7 @@ This page is based on the assumption that user has logged in the car rental syst
 
 This page is implemented by **[amis]([介绍 (baidu.com)](https://aisuda.bce.baidu.com/amis/zh-CN/docs/index))** framework. **amis** is a low-code front-end web framework published by Baidu. 
 
-UI source code url: 
+**UI source code is in carrental-ui diretory.**
 
 ![image-20221212002052852](assets/ui-guide-1.png)
 

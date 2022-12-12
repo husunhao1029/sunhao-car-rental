@@ -1,0 +1,109 @@
+{
+	"type": "page",
+  "name": "pageArea",
+	"body": [
+    {
+		"type": "form",
+    "title": "Booking Area",
+		"name": "bookindArea",
+		"body": [
+      {
+				"type": "input-date",
+				"label": "Start Time",
+				"name": "startTime",
+				"id": "u:33d077e9f2ba",
+				"embed": false,
+				"placeholder": "select start time",
+				"size": "sm",
+				"mode": "inline"
+			},
+			{
+				"type": "input-date",
+				"label": "End Time",
+				"name": "endTime",
+				"id": "u:b8934c07e700",
+				"embed": false,
+				"placeholder": "select end time",
+				"size": "sm",
+				"mode": "inline",
+				"clearable": true
+			},
+			{
+				"type": "button",
+				"label": "search",
+        "level": "primary",
+        "actionType": "reload",
+        "target": "bookindArea.select?startTime2=${startTime}&endTime2=${endTime}&queryTime=${_|now}"
+      },
+			{
+				"type": "select",
+				"name": "select",
+				"label": "Car Selector",
+        "placeholder":"select available car",
+				"menuTpl": "<div><b style=\"color:blue\">CarModel</b>:${label}, <b style=\"color:blue\">avaliable</b>: ${available}</div>",
+				"source": {
+					"method": "get",
+					"url": "http://118.89.58.160/api/cars?startTime=${startTime2}&endTime=${endTime2}&_timestamp=${queryTime}",
+					"data": {
+						"rows": "$responseData.data.rows"
+					}
+				}
+			},
+			{
+				"type": "button",
+				"label": "Rent now!",
+				"name": "rentNow",
+        "level": "primary",
+        "actionType": "submit",
+				"api": {
+          "method":"post",
+          "url":"http://118.89.58.160/api/orders",
+          "data": {
+            "car_model": "${select}",
+            "start_time": "${startTime}",
+            "end_time": "${endTime}"
+          }
+        } 
+			}
+		]
+	  }, 
+    {
+      "type": "button",
+      "label": "Query Orders",
+      "level": "primary",
+      "actionType": "ajax",
+      "api":"get:http://118.89.58.160/api/orders",
+      "reload": "orderService?rows=${rows}"
+    },
+    {
+      "type": "service",
+      "name": "orderService",
+      "body": [
+        {
+          "type": "table",
+          "name": "orderList",
+          "title": "Order List",
+          "source": "$rows",
+          "columns": [
+            {
+              "name": "order_id",
+              "label": "Order Id"
+            },
+            {
+              "name": "model",
+              "label": "Car Model"
+            },
+            {
+              "name": "start_time",
+              "label": "Start Time"
+            },
+            {
+              "name": "end_time",
+              "label": "End Time"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -66,6 +66,7 @@ This page is implemented by **[amis]([介绍 (baidu.com)](https://aisuda.bce.bai
    
    As mentioned above, since the system doen't integrate **User Management Module** currently. We try to make the event keep simple. Thus, in this version's design, we only have **cars** and **orders** table. We can use car table to query cars information, and distribute cars to different orders. I **only add required fields in table**, extra info like create_time, creator, edit_time etc. won't show in this project temporarily. Thus, the ER-diagram like below:
    
+
 ![image-20221212144821112](assets/ER-diagram.png)
 
 ```sql
@@ -95,4 +96,62 @@ CREATE TABLE `orders` (
 I user Tencent Cloud to publish this project (**Poor, no Master/VISA Card T T**), the deploy framework is as below.
 
 ![image-20221212215821787](assets/deploy-framework.png)
+
+### What's More
+
+Here is the configuration of Nginx, I use it to solve the **CORS** problem on the web server.
+
+```ngin
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+        listen       80 default_server;
+        listen       [::]:80 default_server;
+        server_name  localhost;
+        root         /usr/share/nginx/html;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        location / {
+		proxy_pass http://localhost:3000;
+        }
+
+	location /api/ {
+		proxy_pass http://localhost:8080/;
+	}
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+}
+```
 

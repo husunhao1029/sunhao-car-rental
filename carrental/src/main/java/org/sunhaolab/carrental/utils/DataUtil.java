@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class DataUtil {
 
-    public static Map<String, Integer> mapListToMap(List<Map<String, Integer>> list, String keyField, String valueField) {
+    public static Map<String, Integer> mapListToMap(List<Map<String, Object>> list, String keyField, String valueField) {
         if (CollectionUtils.isEmpty(list)) {
             return Collections.emptyMap();
         }

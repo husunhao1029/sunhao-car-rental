@@ -9,7 +9,7 @@ import java.util.Map;
 @Repository
 @Mapper
 public interface OrderMapper {
-    List<Map<String, Integer>> countOccupiedNum(String startTime, String endTime);
+    List<Map<String, Object>> countOccupiedNum(String startTime, String endTime);
 
     List<Map<String, String>> selectOrderList();
 

@@ -43,7 +43,13 @@ public class CarsServiceImpl implements CarsService {
         endTime = DateUtil.stampToDate(endTime);
 
         List<Model> modelList = carsMapper.selectModelCount();
-        List<Map<String, Integer>> occupiedModelList = orderMapper.countOccupiedNum(startTime, endTime);
+
+        if(modelList.isEmpty()) {
+            logger.error("No cars in DB, please add cars info.");
+            throw new ServiceException("No available cars.");
+        }
+
+        List<Map<String, Object>> occupiedModelList = orderMapper.countOccupiedNum(startTime, endTime);
         Map<String, Integer> occupiedModelMap;
         try {
             occupiedModelMap = DataUtil.mapListToMap(occupiedModelList, "model", "counter");
